@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetCountryInformationUseCase @Inject constructor(
+class GetCountriesDetailsUseCase @Inject constructor(
     private val countryDetailsRepository: CountryDetailsRepository,
     @ApplicationContext val context: Context
 ){

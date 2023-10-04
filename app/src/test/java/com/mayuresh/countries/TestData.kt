@@ -22,6 +22,22 @@ object TestData {
         }
     }
 
+    fun getFinlandCountryResponseRetrofit(isError: Boolean): Response<List<CountryModel>> {
+        if (isError) {
+            return Response.error(
+                400, "{\"key\":[\"somestuff\"]}"
+                    .toResponseBody("application/json".toMediaTypeOrNull())
+            )
+        } else {
+            return Response.success(getFinlandCountryData())
+        }
+    }
+
+    private fun getFinlandCountryData(): List<CountryModel> {
+        val itemType = object : TypeToken<List<CountryModel>>() {}.type
+        return Gson().fromJson<List<CountryModel>>(jsonString, itemType).filter { it.name.common == "Finland" }
+    }
+
     fun getCountriesData(): List<CountryModel> {
         val itemType = object : TypeToken<List<CountryModel>>() {}.type
         return Gson().fromJson<List<CountryModel>>(jsonString, itemType)

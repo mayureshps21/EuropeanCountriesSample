@@ -1,5 +1,6 @@
 package com.mayuresh.countries.data.service
 
+import com.mayuresh.countries.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.Buffer
@@ -21,8 +22,10 @@ class LoggingInterceptor : Interceptor {
         val responseLog = "Response: ${response.code} $responseContent"
 
         // Print the logs or save them to a file as needed
-        println(requestLog)
-        println(responseLog)
+        if (BuildConfig.DEBUG) {
+            println(requestLog)
+            println(responseLog)
+        }
 
         return response
     }
@@ -39,7 +42,6 @@ class LoggingInterceptor : Interceptor {
     private fun bodyToString(responseBody: okhttp3.ResponseBody): String {
         try {
             val buffer = Buffer()
-
             return responseBody.byteStream().toString()
         } catch (e: IOException) {
             return "Error reading request body."

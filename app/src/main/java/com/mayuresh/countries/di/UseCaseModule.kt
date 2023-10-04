@@ -3,7 +3,7 @@ package com.mayuresh.countries.di
 import android.content.Context
 import com.mayuresh.countries.domain.repository.CountryDetailsRepository
 import com.mayuresh.countries.domain.repository.EuropeanCountriesListRepository
-import com.mayuresh.countries.domain.usecase.GetCountryInformationUseCase
+import com.mayuresh.countries.domain.usecase.GetCountriesDetailsUseCase
 import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,8 +21,8 @@ object UseCaseModule {
     }
 
     @Provides
-    fun provideGetCountryInformationUseCase(countryDetailsRepository: CountryDetailsRepository, @ApplicationContext context: Context): GetCountryInformationUseCase {
-        return GetCountryInformationUseCase(countryDetailsRepository = countryDetailsRepository, context = context )
+    fun provideGetCountryInformationUseCase(countryDetailsRepository: CountryDetailsRepository, @ApplicationContext context: Context): GetCountriesDetailsUseCase {
+        return GetCountriesDetailsUseCase(countryDetailsRepository = countryDetailsRepository, context = context )
     }
 
 }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * This class is used for map the server response to desired response.
  */
-class EuropeCountryListMapper @Inject constructor() :
+class EuropeanCountryListMapper @Inject constructor() :
     Mapper<List<CountryModel>, List<CountryListUiState>> {
 
     override fun mapFrom(fromList: List<CountryModel>): List<CountryListUiState> {

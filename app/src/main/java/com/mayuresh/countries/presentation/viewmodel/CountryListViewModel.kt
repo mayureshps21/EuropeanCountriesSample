@@ -3,8 +3,9 @@ package com.mayuresh.countries.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayuresh.countries.data.util.Response
-import com.mayuresh.countries.domain.model.CountryListUiState
 import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
+import com.mayuresh.countries.presentation.intent.CountriesIntent
+import com.mayuresh.countries.presentation.state.CountriesListState
 import com.mayuresh.countries.presentation.util.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,51 +24,52 @@ class CountryListViewModel @Inject constructor(
     val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    var isInternetAvailable = MutableStateFlow(true)
-
-    var isError = MutableStateFlow(false)
-
-    var isLoading = MutableStateFlow(true)
-
-    private val _countriesUiState = MutableStateFlow<List<CountryListUiState>>(emptyList())
-    val countriesUiState: StateFlow<List<CountryListUiState>> = _countriesUiState
+    private val _state = MutableStateFlow(CountriesListState(isLoading = true))
+    val state: StateFlow<CountriesListState> get() = _state
 
     init {
-        fetchEuropeCountries()
+        processIntent(CountriesIntent.LoadCountries)
     }
 
-    private fun fetchEuropeCountries() {
+    fun processIntent(intent: CountriesIntent) {
+        when (intent) {
+            is CountriesIntent.LoadCountries -> loadCountries()
+        }
+    }
+
+    private fun loadCountries() {
         viewModelScope.launch {
-            try {
-                if (networkHelper.isNetworkConnected()) {
-                    getEuropeanCountriesUseCase.invoke()
-                        .collect() { response ->
-                            when (response) {
-                                is Response.Success -> {
-                                    _countriesUiState.value = response.data
-                                    isError.value = false
-                                    isLoading.value = false
-                                }
+            if (networkHelper.isNetworkConnected()) {
+                getEuropeanCountriesUseCase.invoke()
+                    .collect() { response ->
+                        when (response) {
+                            is Response.Success -> {
+                                _state.value = CountriesListState(
+                                    countries = response.data,
+                                    isLoading = false
+                                )
+                            }
 
-                                is Response.Error -> {
-                                    isError.value = true
-                                    isLoading.value = false
-                                }
+                            is Response.Error -> {
+                                _state.value = CountriesListState(
+                                    errorCode = 400,
+                                    isLoading = false
+                                )
+                            }
 
-                                else -> {
-                                    isError.value = true
-                                    isLoading.value = false
-                                }
+                            else -> {
+                                _state.value = CountriesListState(
+                                    errorCode = 400,
+                                    isLoading = false
+                                )
                             }
                         }
-                    isInternetAvailable.value = true
-                } else {
-                    isInternetAvailable.value = false
-                    isLoading.value = false
-                }
-            } catch (e: Exception) {
-                isError.value = true
-                isLoading.value = false
+                    }
+            } else {
+                _state.value = CountriesListState(
+                    errorCode = 100,
+                    isLoading = false
+                )
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.mayuresh.countries.presentation.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -50,35 +51,30 @@ fun EuropeCountryListScreenComponent(
     viewModel: CountryListViewModel = hiltViewModel(),
     onCountrySelection: (CountryListUiState?) -> Unit
 ) {
-    val countries by viewModel.countriesUiState.collectAsState()
-    val isInternetAvailable by viewModel.isInternetAvailable.collectAsState()
-    val isError by viewModel.isError.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val state by viewModel.state.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        ProgressBarComposable(modifier = Modifier.fillMaxWidth(), showLoading = isLoading)
-        if (countries.isNotEmpty()) {
-            LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
-                items(countries) { country ->
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            state.isLoading -> ProgressBarComposable()
+            state.errorCode != 0 ->
+                Text(
+                    text = if (state.errorCode == 400) stringResource(id = R.string.internet_error_message) else stringResource(
+                        id = R.string.api_error_message
+                    ),
+                    style = EuropeCountryTypography.labelSmall,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp),
+                    textAlign = TextAlign.Center
+                )
+
+            else -> LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
+                items(state.countries) { country ->
                     CountryListItem(country) {
                         onCountrySelection.invoke(it)
                     }
                 }
             }
-        } else if (!isInternetAvailable || isError) {
-            Text(
-                text = if (!isError) stringResource(id = R.string.no_articles_error_message) else stringResource(
-                    id = R.string.no_articles_api_error_message
-                ),
-                style = EuropeCountryTypography.labelSmall,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                textAlign = TextAlign.Center
-            )
         }
     }
 }
@@ -134,7 +130,7 @@ fun CountryListItem(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = country.region.plus("( "+country.subregion+" )"),
+                    text = country.region.plus(" ( "+ country.subregion + ")"),
                     maxLines = 1,
                     style = EuropeCountryTypography.labelMedium
                 )

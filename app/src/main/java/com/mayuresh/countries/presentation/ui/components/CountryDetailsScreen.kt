@@ -3,6 +3,7 @@ package com.mayuresh.countries.presentation.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mayuresh.countries.R
+import com.mayuresh.countries.domain.model.CountryDetailsUiState
+import com.mayuresh.countries.presentation.intent.CountryDetailsIntent
 import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
 import com.mayuresh.countries.presentation.ui.theme.NYTimesShapes
 import com.mayuresh.countries.presentation.viewmodel.CountryDetailsViewModel
@@ -55,155 +58,157 @@ fun CountryDetailsScreenComponent(
     viewModel: CountryDetailsViewModel = hiltViewModel(),
     countryCode: String
 ) {
-    val placeholderImage = R.drawable.thumbnail
-    val country by viewModel.countryDetailsUiState.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val isInternetAvailable by viewModel.isInternetAvailable.collectAsState()
-    val isError by viewModel.isError.collectAsState()
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.fetchCountries(countryCode)
+        viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails(countryCode))
     })
+    val state by viewModel.state.collectAsState()
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            state.isLoading -> ProgressBarComposable()
+            state.errorCode != 0 ->
+                Text(
+                    text = if (state.errorCode == 400) stringResource(id = R.string.internet_error_message) else stringResource(
+                        id = R.string.api_error_message
+                    ),
+                    style = EuropeCountryTypography.labelSmall,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp),
+                    textAlign = TextAlign.Center
+                )
 
-    if (!isInternetAvailable || isError) {
-        Text(
-            text = if (!isError) stringResource(id = R.string.no_articles_error_message) else stringResource(
-                id = R.string.no_articles_api_error_message
-            ),
-            style = EuropeCountryTypography.labelSmall,
+            else -> CountryDetailsComponent(state.country)
+        }
+    }
+}
+
+@Composable
+fun CountryDetailsComponent(country: CountryDetailsUiState) {
+    val placeholderImage = R.drawable.thumbnail
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(country.flagImageUrl)
+                .placeholder(placeholderImage)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            error = painterResource(id = placeholderImage),
             modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            textAlign = TextAlign.Center
+                .fillMaxWidth(1f)
+                .height(300.dp)
+                .border(BorderStroke(3.dp, MaterialTheme.colorScheme.primary))
+                .background(MaterialTheme.colorScheme.primary)
         )
-    } else {
-        Column(
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Card(
+            shape = NYTimesShapes.medium,
+            elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
         ) {
-            ProgressBarComposable(modifier = Modifier.fillMaxWidth(), showLoading = isLoading)
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(country.flagImageUrl)
-                    .placeholder(placeholderImage)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                error = painterResource(id = placeholderImage),
-                modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .height(300.dp)
-                    .border(BorderStroke(3.dp, MaterialTheme.colorScheme.primary))
-                    .background(MaterialTheme.colorScheme.primary)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Card(
-                shape = NYTimesShapes.medium,
-                elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
+            Column(
+                modifier = Modifier.padding(10.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                                append(stringResource(id = R.string.region).plus(" "))
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Medium,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append(country.region)
-                            }
-                        },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = EuropeCountryTypography.titleMedium,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                                append(stringResource(id = R.string.subregion).plus(" "))
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Medium,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append(country.subregion)
-                            }
-                        },
-                        maxLines = 1,
-                        style = EuropeCountryTypography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                                append(stringResource(id = R.string.population).plus(" "))
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Medium,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append(country.population)
-                            }
-                        },
-                        maxLines = 1,
-                        style = EuropeCountryTypography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                                append(stringResource(id = R.string.currency).plus(" "))
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Medium,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append(country.currencies)
-                            }
-                        },
-                        maxLines = 2,
-                        style = EuropeCountryTypography.titleMedium
-                    )
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                                append(stringResource(id = R.string.language).plus(" "))
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Medium,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append(country.languages)
-                            }
-                        },
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = EuropeCountryTypography.titleMedium
-                    )
-
-                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(stringResource(id = R.string.region).plus(" "))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontStyle = FontStyle.Italic
+                            )
+                        ) {
+                            append(country.region)
+                        }
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = EuropeCountryTypography.titleMedium,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(stringResource(id = R.string.subregion).plus(" "))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontStyle = FontStyle.Italic
+                            )
+                        ) {
+                            append(country.subregion)
+                        }
+                    },
+                    maxLines = 1,
+                    style = EuropeCountryTypography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(stringResource(id = R.string.population).plus(" "))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontStyle = FontStyle.Italic
+                            )
+                        ) {
+                            append(country.population)
+                        }
+                    },
+                    maxLines = 1,
+                    style = EuropeCountryTypography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(stringResource(id = R.string.currency).plus(" "))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontStyle = FontStyle.Italic
+                            )
+                        ) {
+                            append(country.currencies)
+                        }
+                    },
+                    maxLines = 2,
+                    style = EuropeCountryTypography.titleMedium
+                )
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(stringResource(id = R.string.language).plus(" "))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Medium,
+                                fontStyle = FontStyle.Italic
+                            )
+                        ) {
+                            append(country.languages)
+                        }
+                    },
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    style = EuropeCountryTypography.titleMedium
+                )
             }
-
         }
     }
 }

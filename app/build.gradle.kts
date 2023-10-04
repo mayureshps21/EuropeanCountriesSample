@@ -17,12 +17,6 @@ android {
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Access the API key from local.properties
-//        val properties = Properties()
-//        properties.load(project.rootProject.file("local.properties").inputStream())
-//
-//        buildConfigField("String", "NYTimesApiKey", "\"${properties.getProperty("NYTimesApiKey")}\"")
     }
 
     signingConfigs {
@@ -138,19 +132,10 @@ dependencies {
 
     implementation(libs.google.android.material)
 
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.core)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.test.rules)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.mockk.android)
     testImplementation(libs.core.testing)
+    testImplementation(libs.robolectric)
 }
 
 tasks.withType<Test>().configureEach {
