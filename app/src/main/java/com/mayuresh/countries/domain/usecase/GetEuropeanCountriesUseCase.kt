@@ -1,10 +1,10 @@
 package com.mayuresh.countries.domain.usecase
 
-import com.mayuresh.countries.data.mapper.EuropeCountryListMapper
+import com.mayuresh.countries.data.mapper.EuropeanCountryListMapper
 import com.mayuresh.countries.data.model.CountryModel
+import com.mayuresh.countries.data.util.Response
 import com.mayuresh.countries.domain.model.CountryListUiState
 import com.mayuresh.countries.domain.repository.EuropeanCountriesListRepository
-import com.mayuresh.countries.data.util.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class GetEuropeanCountriesUseCase @Inject constructor(private val europeCountrie
             val response = europeCountriesListRepository.getEuropeCountriesList()
             if (response.isSuccessful) {
                 val countriesList = response.body() as List<CountryModel>
-                val result = EuropeCountryListMapper().mapFrom(countriesList)
+                val result = EuropeanCountryListMapper().mapFrom(countriesList)
                 emit(Response.Success(result))
             } else {
                 emit(Response.Error(code = response.code(), message = response.message()))

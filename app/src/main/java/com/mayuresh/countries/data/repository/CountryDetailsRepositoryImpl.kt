@@ -6,9 +6,9 @@ import com.mayuresh.countries.domain.repository.CountryDetailsRepository
 import retrofit2.Response
 import javax.inject.Inject
 
-class CountryDetailsRepositoryImpl @Inject constructor(private val apiService: ApiService) : CountryDetailsRepository{
+class CountryDetailsRepositoryImpl @Inject constructor(private val apiService: ApiService) :
+    CountryDetailsRepository {
     override suspend fun getCountryDetails(code: String): Response<List<CountryModel>> {
         return apiService.getSingleCountryDetails(code)
     }
-
 }

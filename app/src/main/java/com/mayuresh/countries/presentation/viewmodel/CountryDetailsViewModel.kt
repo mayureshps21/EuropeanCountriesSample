@@ -3,8 +3,9 @@ package com.mayuresh.countries.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayuresh.countries.data.util.Response
-import com.mayuresh.countries.domain.model.CountryDetailsUiState
-import com.mayuresh.countries.domain.usecase.GetCountryInformationUseCase
+import com.mayuresh.countries.domain.usecase.GetCountriesDetailsUseCase
+import com.mayuresh.countries.presentation.intent.CountryDetailsIntent
+import com.mayuresh.countries.presentation.state.CountryDetailsState
 import com.mayuresh.countries.presentation.util.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,60 +16,65 @@ import javax.inject.Inject
 
 /**
  * This view model is responsible for pass article list to composable functions
- * @param getCountryInformationUseCase
+ * @param getCountriesDetailsUseCase
  * @param networkHelper
  */
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class CountryDetailsViewModel @Inject constructor(
-    private val getCountryInformationUseCase: GetCountryInformationUseCase,
+    private val getCountriesDetailsUseCase: GetCountriesDetailsUseCase,
     private val networkHelper: NetworkHelper
 ) : ViewModel() {
 
-    var isInternetAvailable = MutableStateFlow(true)
+    private val _state = MutableStateFlow(CountryDetailsState(isLoading = true))
+    val state: StateFlow<CountryDetailsState> get() = _state
 
-    var isError = MutableStateFlow(false)
+    fun processIntent(intent: CountryDetailsIntent) {
+        when (intent) {
+            is CountryDetailsIntent.FetchCountryDetails -> fetchCountries(intent.data)
+        }
+    }
 
-    var isLoading = MutableStateFlow(true)
-
-    private val _countryDetailsUiState = MutableStateFlow<CountryDetailsUiState>(
-        CountryDetailsUiState()
-    )
-    val countryDetailsUiState: StateFlow<CountryDetailsUiState> = _countryDetailsUiState
-
-
-    fun fetchCountries(countryCode: String) {
+    private fun fetchCountries(countryCode: String) {
         viewModelScope.launch {
             try {
                 if (networkHelper.isNetworkConnected()) {
-                    getCountryInformationUseCase.invoke(countryCode)
+                    getCountriesDetailsUseCase.invoke(countryCode)
                         .collect() { response ->
                             when (response) {
                                 is Response.Success -> {
-                                    _countryDetailsUiState.value = response.data
-                                    isError.value = false
-                                    isLoading.value = false
+                                    _state.value = CountryDetailsState(
+                                        country = response.data,
+                                        isLoading = false
+                                    )
                                 }
 
                                 is Response.Error -> {
-                                    isError.value = true
-                                    isLoading.value = false
+                                    _state.value = CountryDetailsState(
+                                        errorCode = 400,
+                                        isLoading = false
+                                    )
                                 }
 
                                 else -> {
-                                    isError.value = true
-                                    isLoading.value = false
+                                    _state.value = CountryDetailsState(
+                                        errorCode = 500,
+                                        isLoading = false
+                                    )
                                 }
                             }
                         }
-                    isInternetAvailable.value = true
                 } else {
-                    isInternetAvailable.value = false
-                    isLoading.value = false
+                    _state.value = CountryDetailsState(
+                        errorCode = 100,
+                        isLoading = false
+                    )
                 }
             } catch (e: Exception) {
-                isError.value = true
-                isLoading.value = false
+                _state.value = CountryDetailsState(
+                    errorCode = 100,
+                    isLoading = false
+                )
             }
         }
     }
