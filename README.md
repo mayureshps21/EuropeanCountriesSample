@@ -1,4 +1,4 @@
-A simple app to hit the NY Times Most Popular Articles API and show a list of articles, that shows details when items on the list item is tapped and implement Clean architecture using Dagger Hilt, Retrofit, Coroutines, Flows, Jetpack Compose and Navigation Component.
+A simple app to hit the European Country List API and show a list of european countries, that shows details when items on the list item is tapped and implement MVI architecture using Dagger Hilt, Retrofit, Coroutines, Flows, Jetpack Compose and Navigation Component.
 
 API used - https://restcountries.com/
 
@@ -12,7 +12,7 @@ API Documentation: https://restcountries.com/
 <br>
 
 ## This Project showcases:
-1. Clean architecture.
+1. MVI architecture.
 2. View Model.
 3. Unit test cases.
 4. Retrofit.
@@ -25,15 +25,12 @@ API Documentation: https://restcountries.com/
 11. Mockk.
     <br>
 
-Add Below line in local.properties for API response:
-NYTimesApiKey=b61Rg7v1AwLS7FM9z6Ri2dhAIJLKvfsX
 
 ## The app has following packages:
 1. **data**: This package is responsible for providing data to the application.
 2. **domain**: This layer has use case and business logic.
 3. **presentation**: This package contains user interface and view model
 4. **di**: In this package dagger hilt dependancies documented.
-5. **utils**: Utility classes.
    <br>
 
 ## If you see java 11 error then do following steps
