@@ -1,33 +1,23 @@
 package com.mayuresh.countries.di
 
 import android.content.Context
-import com.mayuresh.countries.domain.repository.CountryDetailsRepository
-import com.mayuresh.countries.domain.repository.EuropeanCountriesListRepository
-import com.mayuresh.countries.domain.usecase.GetCountriesDetailsUseCase
-import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
+import com.mayuresh.countries.presentation.util.NetworkHelper
+import com.mayuresh.data.repository.CountryDetailsRepository
+import com.mayuresh.data.repository.EuropeanCountriesListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Singleton
     @Provides
-    fun provideGetEuropeanCountriesUseCase(europeanCountriesListRepository: EuropeanCountriesListRepository): GetEuropeanCountriesUseCase {
-        return GetEuropeanCountriesUseCase(europeanCountriesListRepository)
-    }
-
-    @Provides
-    fun provideGetCountryInformationUseCase(
-        countryDetailsRepository: CountryDetailsRepository,
-        @ApplicationContext context: Context,
-    ): GetCountriesDetailsUseCase {
-        return GetCountriesDetailsUseCase(
-            countryDetailsRepository = countryDetailsRepository,
-            context = context,
-        )
+    fun getNetWorkHelper(@ApplicationContext context: Context): NetworkHelper {
+        return NetworkHelper(context)
     }
 }

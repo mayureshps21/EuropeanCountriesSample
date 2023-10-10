@@ -1,6 +1,7 @@
 package com.mayuresh.countries.presentation.state
 
-import com.mayuresh.countries.domain.model.CountryDetailsModel
+import com.mayuresh.data.model.CountryDetailsModel
+
 
 data class CountryDetailsUiState(
     val country: CountryDetailsModel = CountryDetailsModel(),

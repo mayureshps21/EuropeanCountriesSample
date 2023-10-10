@@ -35,11 +35,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mayuresh.countries.R
-import com.mayuresh.countries.data.util.AppConstants
-import com.mayuresh.countries.domain.model.CountryListModel
+import com.mayuresh.data.util.AppConstants
 import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
 import com.mayuresh.countries.presentation.ui.theme.EuropeanCountriesShapes
 import com.mayuresh.countries.presentation.viewmodel.CountryListViewModel
+import com.mayuresh.data.model.CountryListModel
 
 /**
  * This composable is responsible for list view representation of articles

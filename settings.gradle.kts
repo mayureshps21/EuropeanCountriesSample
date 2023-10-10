@@ -1,4 +1,3 @@
-//val snapshotVersion : String? = System.getenv("COMPOSE_SNAPSHOT_ID")
 
 pluginManagement {
     repositories {
@@ -8,7 +7,6 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -16,3 +14,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CountryListSample"
 include(":app")
+include("core:data")
+include("core:domain")
+include("features:home")
+include("features:detail")

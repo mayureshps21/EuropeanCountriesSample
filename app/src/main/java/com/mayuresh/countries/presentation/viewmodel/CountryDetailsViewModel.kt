@@ -2,12 +2,12 @@ package com.mayuresh.countries.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayuresh.countries.data.util.AppConstants
-import com.mayuresh.countries.domain.usecase.GetCountriesDetailsUseCase
-import com.mayuresh.countries.domain.util.Response
 import com.mayuresh.countries.presentation.intent.CountryDetailsIntent
 import com.mayuresh.countries.presentation.state.CountryDetailsUiState
 import com.mayuresh.countries.presentation.util.NetworkHelper
+import com.mayuresh.data.util.AppConstants
+import com.mayuresh.domain.usecase.GetCountriesDetailsUseCase
+import com.mayuresh.domain.util.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

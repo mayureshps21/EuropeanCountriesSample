@@ -1,6 +1,7 @@
 package com.mayuresh.countries.presentation.state
 
-import com.mayuresh.countries.domain.model.CountryListModel
+import com.mayuresh.data.model.CountryListModel
+
 
 data class CountriesListUiState(
     val countries: List<CountryListModel> = emptyList(),

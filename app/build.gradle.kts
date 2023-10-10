@@ -80,8 +80,6 @@ android {
     }
 
     packaging.resources {
-        // Multiple dependency bring these files in. Exclude them to enable
-        // our test APK to build (has no effect on our AARs)
         excludes += "/META-INF/AL2.0"
         excludes += "/META-INF/LGPL2.1"
         excludes += "/META-INF/DEPENDENCIES"
@@ -89,10 +87,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
+    implementation(project(":features:home"))
+    implementation(project(":features:detail"))
+    implementation(project(":core:domain"))
+
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
-
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)
 

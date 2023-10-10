@@ -38,12 +38,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mayuresh.countries.R
-import com.mayuresh.countries.data.util.AppConstants
-import com.mayuresh.countries.domain.model.CountryDetailsModel
 import com.mayuresh.countries.presentation.intent.CountryDetailsIntent
 import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
 import com.mayuresh.countries.presentation.ui.theme.EuropeanCountriesShapes
 import com.mayuresh.countries.presentation.viewmodel.CountryDetailsViewModel
+import com.mayuresh.data.model.CountryDetailsModel
+import com.mayuresh.data.util.AppConstants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**

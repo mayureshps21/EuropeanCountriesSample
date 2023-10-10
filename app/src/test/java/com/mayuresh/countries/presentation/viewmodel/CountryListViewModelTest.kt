@@ -2,16 +2,15 @@ package com.mayuresh.countries.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mayuresh.countries.MainCoroutineRule
-import com.mayuresh.countries.data.util.AppConstants
-import com.mayuresh.countries.domain.model.CountryListModel
-import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
-import com.mayuresh.countries.domain.util.Response
 import com.mayuresh.countries.presentation.intent.CountriesIntent
 import com.mayuresh.countries.presentation.util.NetworkHelper
+import com.mayuresh.data.model.CountryListModel
+import com.mayuresh.data.util.AppConstants
+import com.mayuresh.domain.usecase.GetEuropeanCountriesUseCase
+import com.mayuresh.domain.util.Response
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
