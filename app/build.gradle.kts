@@ -20,7 +20,6 @@ android {
     }
 
     signingConfigs {
-        // We use a bundled debug keystore, to allow debug builds from CI to be upgradable
         named("debug") {
             storeFile = rootProject.file("debug.keystore")
             storePassword = "android"
@@ -52,7 +51,6 @@ android {
         }
     }
 
-    // Tests can be Robolectric or instrumented tests
     sourceSets {
         val sharedTestDir = "src/sharedTest/java"
         getByName("test") {
@@ -64,8 +62,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 
     buildFeatures {
@@ -78,7 +76,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "18"
     }
 
     packaging.resources {

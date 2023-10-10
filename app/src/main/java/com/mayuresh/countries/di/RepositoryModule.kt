@@ -21,7 +21,7 @@ abstract class RepositoryModule {
      */
     @Binds
     abstract fun bindCountryListRepository(
-        europeCountriesListRepositoryImpl: EuropeanCountriesListRepositoryImpl
+        europeCountriesListRepositoryImpl: EuropeanCountriesListRepositoryImpl,
     ): EuropeanCountriesListRepository
 
     /**
@@ -32,6 +32,6 @@ abstract class RepositoryModule {
      */
     @Binds
     abstract fun bindCountryDetailsRepository(
-        countryDetailsRepositoryImpl: CountryDetailsRepositoryImpl
+        countryDetailsRepositoryImpl: CountryDetailsRepositoryImpl,
     ): CountryDetailsRepository
 }

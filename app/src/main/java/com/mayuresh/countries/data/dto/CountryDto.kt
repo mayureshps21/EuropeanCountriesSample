@@ -1,11 +1,10 @@
-package com.mayuresh.countries.data.model
-
+package com.mayuresh.countries.data.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.mayuresh.countries.data.model.countryinfo.*
+import com.mayuresh.countries.data.dto.countryinfo.*
 
-data class CountryModel(
+data class CountryDto(
     @Transient
     val roomId: Long,
     @SerializedName("altSpellings")
@@ -22,22 +21,22 @@ data class CountryModel(
     val capital: List<String>?,
     @SerializedName("capitalInfo")
     @Expose
-    val capitalInfo: CapitalInfo?,
+    val capitalInfoDto: CapitalInfoDto?,
     @SerializedName("car")
     @Expose
-    val car: Car?,
+    val carDto: CarDto?,
     @SerializedName("map")
     @Expose
-    val maps: Maps?,
+    val mapsDto: MapsDto?,
     @SerializedName("coatOfArms")
     @Expose
-    val coatOfArms: CoatOfArms?,
+    val coatOfArmsDto: CoatOfArmsDto?,
     @SerializedName("continents")
     @Expose
     val continents: List<String>?,
     @SerializedName("demonyms")
     @Expose
-    val demonyms: Demonyms?,
+    val demonymsDto: DemonymsDto?,
     @SerializedName("ccn3")
     @Expose
     val ccn3: String?,
@@ -49,7 +48,7 @@ data class CountryModel(
     val flag: String?,
     @SerializedName("flags")
     @Expose
-    val flags: Flags?,
+    val flagsDto: FlagsDto?,
     @SerializedName("independent")
     @Expose
     val independent: Boolean,
@@ -61,7 +60,7 @@ data class CountryModel(
     val latlng: List<Double>?,
     @SerializedName("name")
     @Expose
-    var name: Name,
+    var nameDto: NameDto,
     @SerializedName("population")
     @Expose
     val population: Int,
@@ -85,12 +84,12 @@ data class CountryModel(
     val tld: List<String>?,
     @SerializedName("unMember")
     @Expose
-    val unMember: Boolean
+    val unMember: Boolean,
 ) {
 
     @SerializedName("currencies")
     @Expose
-    var currencies: Map<String, Currency>? = emptyMap()
+    var currencies: Map<String, CurrencyDto>? = emptyMap()
 
     @SerializedName("languages")
     @Expose
@@ -98,6 +97,5 @@ data class CountryModel(
 
     @SerializedName("translations")
     @Expose
-    var translations: Map<String, Translation>? = emptyMap()
-
+    var translations: Map<String, TranslationDto>? = emptyMap()
 }

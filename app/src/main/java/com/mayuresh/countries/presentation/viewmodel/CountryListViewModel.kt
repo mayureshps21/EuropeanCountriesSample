@@ -2,10 +2,11 @@ package com.mayuresh.countries.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayuresh.countries.data.util.Response
+import com.mayuresh.countries.data.util.AppConstants
+import com.mayuresh.countries.domain.util.Response
 import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
 import com.mayuresh.countries.presentation.intent.CountriesIntent
-import com.mayuresh.countries.presentation.state.CountriesListState
+import com.mayuresh.countries.presentation.state.CountriesListUiState
 import com.mayuresh.countries.presentation.util.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,18 +15,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * This view model is responsible for pass article list to composable functions
+ * This view model is responsible for pass countries list to composable functions
  * @param getEuropeanCountriesUseCase
  * @param networkHelper
  */
 @HiltViewModel
 class CountryListViewModel @Inject constructor(
     private val getEuropeanCountriesUseCase: GetEuropeanCountriesUseCase,
-    val networkHelper: NetworkHelper
+    val networkHelper: NetworkHelper,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(CountriesListState(isLoading = true))
-    val state: StateFlow<CountriesListState> get() = _state
+    private val _state = MutableStateFlow(CountriesListUiState(isLoading = true))
+    val state: StateFlow<CountriesListUiState> get() = _state
 
     init {
         processIntent(CountriesIntent.LoadCountries)
@@ -44,31 +45,31 @@ class CountryListViewModel @Inject constructor(
                     .collect() { response ->
                         when (response) {
                             is Response.Success -> {
-                                _state.value = CountriesListState(
+                                _state.value = CountriesListUiState(
                                     countries = response.data,
-                                    isLoading = false
+                                    isLoading = false,
                                 )
                             }
 
                             is Response.Error -> {
-                                _state.value = CountriesListState(
-                                    errorCode = 400,
-                                    isLoading = false
+                                _state.value = CountriesListUiState(
+                                    errorCode = AppConstants.API_RESPONSE_ERROR,
+                                    isLoading = false,
                                 )
                             }
 
-                            else -> {
-                                _state.value = CountriesListState(
-                                    errorCode = 400,
-                                    isLoading = false
+                            is Response.Exception -> {
+                                _state.value = CountriesListUiState(
+                                    errorCode = AppConstants.API_RESPONSE_ERROR,
+                                    isLoading = false,
                                 )
                             }
                         }
                     }
             } else {
-                _state.value = CountriesListState(
-                    errorCode = 100,
-                    isLoading = false
+                _state.value = CountriesListUiState(
+                    errorCode = AppConstants.INTERNET_ERROR,
+                    isLoading = false,
                 )
             }
         }

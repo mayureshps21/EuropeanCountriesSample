@@ -3,6 +3,7 @@ package com.mayuresh.countries.data.repository
 import com.mayuresh.countries.TestData
 import com.mayuresh.countries.data.service.ApiService
 import io.mockk.MockKAnnotations
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
@@ -11,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
@@ -45,5 +47,10 @@ class CountryDetailsRepositoryImplTest {
         countryDetailsRepositoryImpl.getCountryDetails("190")
         // Then
         coVerify(atLeast = 1) { apiService.getSingleCountryDetails("190") }
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 }

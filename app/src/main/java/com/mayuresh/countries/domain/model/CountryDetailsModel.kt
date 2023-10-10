@@ -1,6 +1,6 @@
 package com.mayuresh.countries.domain.model
 
-data class CountryDetailsUiState(
+data class CountryDetailsModel(
     val name: String = "",
     val flagImageUrl: String = "",
     val population: String = "",

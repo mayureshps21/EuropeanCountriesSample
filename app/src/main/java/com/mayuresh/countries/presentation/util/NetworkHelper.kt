@@ -30,7 +30,6 @@ class NetworkHelper constructor(private val context: Context) {
                         ConnectivityManager.TYPE_ETHERNET -> true
                         else -> false
                     }
-
                 }
             }
         }

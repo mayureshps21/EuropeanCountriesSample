@@ -25,11 +25,11 @@ import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppToolbar(
-    title: String,
-    onUpClick: () -> Unit,
+fun AppToolbarComponent(
     modifier: Modifier = Modifier,
+    title: String,
     isShowBackButton: Boolean,
+    onUpClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -37,7 +37,7 @@ fun AppToolbar(
                 text = title,
                 style = EuropeCountryTypography.titleMedium,
                 fontSize = 17.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         },
         modifier = modifier.statusBarsPadding(),
@@ -45,17 +45,17 @@ fun AppToolbar(
             containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = MaterialTheme.colorScheme.onPrimary,
             navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onSecondary
+            actionIconContentColor = MaterialTheme.colorScheme.onSecondary,
         ),
         navigationIcon = {
             if (isShowBackButton) {
                 IconButton(onClick = onUpClick) {
                     Icon(
                         Icons.Filled.ArrowBack,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
-        }
+        },
     )
 }

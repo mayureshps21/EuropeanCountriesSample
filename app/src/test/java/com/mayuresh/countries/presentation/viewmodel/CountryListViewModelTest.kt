@@ -2,16 +2,19 @@ package com.mayuresh.countries.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mayuresh.countries.MainCoroutineRule
-import com.mayuresh.countries.data.util.Response
-import com.mayuresh.countries.domain.model.CountryListUiState
+import com.mayuresh.countries.data.util.AppConstants
+import com.mayuresh.countries.domain.model.CountryListModel
 import com.mayuresh.countries.domain.usecase.GetEuropeanCountriesUseCase
+import com.mayuresh.countries.domain.util.Response
 import com.mayuresh.countries.presentation.intent.CountriesIntent
 import com.mayuresh.countries.presentation.util.NetworkHelper
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -33,10 +36,9 @@ class CountryListViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @RelaxedMockK
+    @MockK
     private lateinit var getEuropeanCountryUseCase: GetEuropeanCountriesUseCase
 
-    @RelaxedMockK
     private lateinit var networkHelper: NetworkHelper
 
     private lateinit var viewModel: CountryListViewModel
@@ -44,24 +46,19 @@ class CountryListViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, true)
+        networkHelper = mockk(relaxed = true)
         viewModel = CountryListViewModel(
             getEuropeanCountriesUseCase = getEuropeanCountryUseCase,
             networkHelper = networkHelper,
         )
     }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
-    }
-
     @Test
-    fun `get countries list success test`() = runTest {
+    fun `countriesListViewModel should update state with expected data when fetching countries list with success and network available`() = runTest {
         //Given
         val isNetworkAvailable = true
-        val countriesList = mutableListOf<CountryListUiState>()
-        countriesList.add(CountryListUiState("Test"))
-        val responseFlow: Flow<Response<List<CountryListUiState>>> = flow {
+        val countriesList = mutableListOf<CountryListModel>()
+        countriesList.add(CountryListModel("Test"))
+        val responseFlow: Flow<Response<List<CountryListModel>>> = flow {
             emit(Response.Success(countriesList))
         }
         //When
@@ -76,13 +73,12 @@ class CountryListViewModelTest {
     }
 
     @Test
-    fun `get countries list error test`() = runTest {
+    fun `countriesListViewModel should update state with expected data when fetching empty countries list with success and network available`() = runTest {
         //Given
         val isNetworkAvailable = true
-        val countriesList = mutableListOf<CountryListUiState>()
-        countriesList.add(CountryListUiState("Test"))
-        val responseFlow: Flow<Response<List<CountryListUiState>>> = flow {
-            emit(Response.Error(code = 400, "Test"))
+        val countriesList = mutableListOf<CountryListModel>()
+        val responseFlow: Flow<Response<List<CountryListModel>>> = flow {
+            emit(Response.Success(countriesList))
         }
         //When
         every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
@@ -91,28 +87,63 @@ class CountryListViewModelTest {
         //Then
         viewModel.processIntent(CountriesIntent.LoadCountries)
         responseFlow.collectLatest {
-            Assert.assertEquals(400, viewModel.state.value.errorCode)
+            Assert.assertEquals(0, viewModel.state.value.countries.size)
         }
     }
 
     @Test
-    fun `get countries list exception case test`() = runTest {
+    fun `countriesListViewModel should update state with error code when fetching countries list with network not available`() = runTest {
+        //Given
+        val isNetworkAvailable = false
+        //When
+        every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
+        //Then
+        viewModel.processIntent(CountriesIntent.LoadCountries)
+        Assert.assertTrue(viewModel.state.value.errorCode == AppConstants.INTERNET_ERROR)
+    }
+
+    @Test
+    fun `countriesListViewModel should update state with error code when fetching countries list with error and network available`() = runTest {
         //Given
         val isNetworkAvailable = true
-        val countriesList = mutableListOf<CountryListUiState>()
-        countriesList.add(CountryListUiState("Test"))
-        val responseFlow: Flow<Response<List<CountryListUiState>>> = flow {
+        val countriesList = mutableListOf<CountryListModel>()
+        countriesList.add(CountryListModel("Test"))
+        val responseFlow: Flow<Response<List<CountryListModel>>> = flow {
+            emit(Response.Error(code = AppConstants.API_RESPONSE_ERROR, "Test"))
+        }
+        //When
+        every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
+        coEvery { getEuropeanCountryUseCase.invoke() } returns responseFlow
+
+        //Then
+        viewModel.processIntent(CountriesIntent.LoadCountries)
+        responseFlow.collectLatest {
+            Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, viewModel.state.value.errorCode)
+        }
+    }
+
+    @Test
+    fun `countriesListViewModel should update state with error code when fetching countries list with exception and network available`() = runTest {
+        //Given
+        val isNetworkAvailable = true
+        val countriesList = mutableListOf<CountryListModel>()
+        countriesList.add(CountryListModel("Test"))
+        val responseFlow: Flow<Response<List<CountryListModel>>> = flow {
             emit(Response.Exception(Throwable(message = "Test")))
         }
         //When
         every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
         coEvery { getEuropeanCountryUseCase.invoke() } returns responseFlow
-
-        //Then
         viewModel.processIntent(CountriesIntent.LoadCountries)
+        //Then
         responseFlow.collectLatest {
-            Assert.assertEquals(400, viewModel.state.value.errorCode)
+            Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, viewModel.state.value.errorCode)
         }
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
 }

@@ -12,16 +12,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun NYTimesNavGraph(
+fun EuropeanCountriesNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = CountryDestinations.COUNTRY_LIST_ROUTE,
-    actionBarTitle: (String?) -> Unit
+    actionBarTitle: (String?) -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(
             route = CountryDestinations.COUNTRY_LIST_ROUTE,
@@ -29,14 +29,14 @@ fun NYTimesNavGraph(
             EuropeCountryListScreenComponent(onCountrySelection = {
                 navController.navigate(
                     route = CountryDestinations.COUNTRY_DETAIL_ROUTE.plus("/")
-                        .plus(it?.countryCode ?: "")
+                        .plus(it?.countryCode ?: ""),
                 )
                 actionBarTitle.invoke(it?.name)
             })
         }
         composable(route = CountryDestinations.COUNTRY_DETAIL_ROUTE.plus("/{code}")) { backStackEntry ->
             CountryDetailsScreenComponent(
-                countryCode = backStackEntry.arguments?.getString("code") ?: ""
+                countryCode = backStackEntry.arguments?.getString("code") ?: "",
             )
         }
     }

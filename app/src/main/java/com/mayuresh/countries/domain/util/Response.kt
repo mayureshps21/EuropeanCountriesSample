@@ -1,4 +1,4 @@
-package com.mayuresh.countries.data.util
+package com.mayuresh.countries.domain.util
 
 /**
  * A sealed class representing the result of a network operation, which can be either a loading, success, an error, or an exception.

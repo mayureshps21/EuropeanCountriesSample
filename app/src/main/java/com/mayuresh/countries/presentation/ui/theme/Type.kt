@@ -13,65 +13,76 @@ import com.mayuresh.countries.R
 
 private val Montserrat = FontFamily(
     Font(R.font.montserrat_regular),
-    Font(R.font.montserrat_medium, FontWeight.W500)
+    Font(R.font.montserrat_medium, FontWeight.W500),
 )
 
-@Suppress("DEPRECATION")
 val defaultTextStyle = TextStyle(
     fontFamily = Montserrat,
     platformStyle = PlatformTextStyle(
-        includeFontPadding = false
+        includeFontPadding = false,
     ),
     lineHeightStyle = LineHeightStyle(
         alignment = LineHeightStyle.Alignment.Center,
-        trim = LineHeightStyle.Trim.None
-    )
+        trim = LineHeightStyle.Trim.None,
+    ),
 )
 
 val EuropeCountryTypography = Typography(
 
     titleLarge = defaultTextStyle.copy(
-        fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp, lineBreak = LineBreak.Heading
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp,
+        lineBreak = LineBreak.Heading,
     ),
     titleMedium = defaultTextStyle.copy(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp,
         fontWeight = FontWeight.Medium,
-        lineBreak = LineBreak.Heading
+        lineBreak = LineBreak.Heading,
     ),
     titleSmall = defaultTextStyle.copy(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
         fontWeight = FontWeight.Medium,
-        lineBreak = LineBreak.Heading
+        lineBreak = LineBreak.Heading,
     ),
     labelLarge = defaultTextStyle.copy(
-        fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp, fontWeight = FontWeight.Medium
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp,
+        fontWeight = FontWeight.Medium,
     ),
     labelMedium = defaultTextStyle.copy(
-        fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Medium
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp,
+        fontWeight = FontWeight.Medium,
     ),
     labelSmall = defaultTextStyle.copy(
-        fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp, fontWeight = FontWeight.Medium
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp,
+        fontWeight = FontWeight.Medium,
     ),
     bodyLarge = defaultTextStyle.copy(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
-        lineBreak = LineBreak.Paragraph
+        lineBreak = LineBreak.Paragraph,
     ),
     bodyMedium = defaultTextStyle.copy(
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
-        lineBreak = LineBreak.Paragraph
+        lineBreak = LineBreak.Paragraph,
     ),
     bodySmall = defaultTextStyle.copy(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
-        lineBreak = LineBreak.Paragraph
+        lineBreak = LineBreak.Paragraph,
     ),
 )

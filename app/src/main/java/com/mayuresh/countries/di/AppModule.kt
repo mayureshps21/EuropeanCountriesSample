@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UseCaseModule {
+object AppModule {
 
     @Provides
     fun provideGetEuropeanCountriesUseCase(europeanCountriesListRepository: EuropeanCountriesListRepository): GetEuropeanCountriesUseCase {
@@ -21,8 +21,13 @@ object UseCaseModule {
     }
 
     @Provides
-    fun provideGetCountryInformationUseCase(countryDetailsRepository: CountryDetailsRepository, @ApplicationContext context: Context): GetCountriesDetailsUseCase {
-        return GetCountriesDetailsUseCase(countryDetailsRepository = countryDetailsRepository, context = context )
+    fun provideGetCountryInformationUseCase(
+        countryDetailsRepository: CountryDetailsRepository,
+        @ApplicationContext context: Context,
+    ): GetCountriesDetailsUseCase {
+        return GetCountriesDetailsUseCase(
+            countryDetailsRepository = countryDetailsRepository,
+            context = context,
+        )
     }
-
 }

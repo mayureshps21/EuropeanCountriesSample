@@ -17,6 +17,7 @@
 package com.mayuresh.countries
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -29,11 +30,13 @@ class MainCoroutineRule(
     val testDispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun starting(description: Description) {
         super.starting(description)
         Dispatchers.setMain(testDispatcher)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun finished(description: Description) {
         super.finished(description)
         Dispatchers.resetMain()

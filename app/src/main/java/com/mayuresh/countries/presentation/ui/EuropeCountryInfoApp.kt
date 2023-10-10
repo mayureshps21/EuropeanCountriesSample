@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import com.mayuresh.countries.R
-import com.mayuresh.countries.presentation.ui.components.AppToolbar
+import com.mayuresh.countries.presentation.ui.components.AppToolbarComponent
 import com.mayuresh.countries.presentation.ui.theme.NYTimesTheme
 
 @Composable
@@ -36,27 +36,25 @@ fun EuropeanCountriesApp() {
         }
         Scaffold(
             topBar = {
-                AppToolbar(
+                AppToolbarComponent(
                     title = actionBarTitle,
                     onUpClick = {
                         navController.navigateUp()
                     },
-                    isShowBackButton = isShowBackButton
+                    isShowBackButton = isShowBackButton,
                 )
-
             },
             content = { paddingValues ->
-                NYTimesNavGraph(
+                EuropeanCountriesNavGraph(
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
                     actionBarTitle = {
                         actionBarTitle = it ?: ""
-                    }
+                    },
                 )
-            })
-
+            },
+        )
     }
 }
-

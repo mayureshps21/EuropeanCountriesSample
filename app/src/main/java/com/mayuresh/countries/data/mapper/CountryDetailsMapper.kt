@@ -1,30 +1,30 @@
 package com.mayuresh.countries.data.mapper
 
-import com.mayuresh.countries.data.model.CountryModel
-import com.mayuresh.countries.domain.model.CountryDetailsUiState
-import com.mayuresh.countries.data.model.countryinfo.Currency
+import com.mayuresh.countries.data.dto.CountryDto
+import com.mayuresh.countries.data.dto.countryinfo.CurrencyDto
+import com.mayuresh.countries.domain.model.CountryDetailsModel
 import com.mayuresh.countries.domain.util.toReadable
 import javax.inject.Inject
 
 /**
  * This class is used for map the server response to desired response.
  */
-class CountryDetailsMapper @Inject constructor() : Mapper<CountryModel, CountryDetailsUiState> {
+class CountryDetailsMapper @Inject constructor() : Mapper<CountryDto, CountryDetailsModel> {
 
-    override fun mapFrom(from: CountryModel): CountryDetailsUiState {
-        return CountryDetailsUiState(
-            name = from.name.common,
-            flagImageUrl = from.flags?.png ?: "",
+    override fun mapFrom(from: CountryDto): CountryDetailsModel {
+        return CountryDetailsModel(
+            name = from.nameDto.common,
+            flagImageUrl = from.flagsDto?.png ?: "",
             population = from.population.toReadable(),
             region = from.region ?: "",
             subregion = from.subregion ?: "",
             currencies = getCommaSeparatedCurrency(from.currencies),
             languages = getCommaSeparatedLanguage(from.languages),
-            googleMapUrl = from.maps?.googleMaps ?: ""
+            googleMapUrl = from.mapsDto?.googleMaps ?: "",
         )
     }
 
-    private fun getCommaSeparatedCurrency(map: Map<String, Currency>?): String {
+    private fun getCommaSeparatedCurrency(map: Map<String, CurrencyDto>?): String {
         val str = StringBuilder("")
         if (!map.isNullOrEmpty()) {
             for ((key, currency) in map) {

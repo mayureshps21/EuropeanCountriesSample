@@ -2,7 +2,8 @@ package com.mayuresh.countries.domain.usecase
 
 import com.mayuresh.countries.TestData
 import com.mayuresh.countries.data.mapper.EuropeanCountryListMapper
-import com.mayuresh.countries.data.model.CountryModel
+import com.mayuresh.countries.data.dto.CountryDto
+import com.mayuresh.countries.data.util.AppConstants
 import com.mayuresh.countries.domain.repository.EuropeanCountriesListRepository
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
@@ -28,23 +29,18 @@ class GetEuropeCountryListUseCaseImplTest {
         getEuropeCountryListUseCaseImpl = GetEuropeanCountriesUseCase(europeCountriesListRepository)
     }
 
-    @After
-    fun tearDown() {
-        clearAllMocks()
-    }
-
     @Test
     fun `Should validate and pass countries response success test`() = runTest {
         // Given
-        val response: Response<List<CountryModel>> = TestData.getCountriesResponseRetrofit(false)
-        val result = EuropeanCountryListMapper().mapFrom(response.body() as List<CountryModel>)
+        val response: Response<List<CountryDto>> = TestData.getCountriesResponseRetrofit(false)
+        val result = EuropeanCountryListMapper().mapFrom(response.body() as List<CountryDto>)
         // When
         coEvery { europeCountriesListRepository.getEuropeCountriesList() } returns response
         val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
         // Then
         responseFlow.collectLatest { data ->
             when (data) {
-                is com.mayuresh.countries.data.util.Response.Success -> {
+                is com.mayuresh.countries.domain.util.Response.Success -> {
                     Assert.assertEquals("Finland", result.get(0).name)
                 }
 
@@ -58,20 +54,25 @@ class GetEuropeCountryListUseCaseImplTest {
     @Test
     fun `Should validate and pass countries response error test`() = runTest {
         // Given
-        val response: Response<List<CountryModel>> = TestData.getCountriesResponseRetrofit(true)
+        val response: Response<List<CountryDto>> = TestData.getCountriesResponseRetrofit(true)
         // When
         coEvery { europeCountriesListRepository.getEuropeCountriesList() } returns response
         val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
         // Then
         responseFlow.collectLatest { data ->
             when (data) {
-                is com.mayuresh.countries.data.util.Response.Error -> {
-                    Assert.assertEquals(400, data.code)
+                is com.mayuresh.countries.domain.util.Response.Error -> {
+                    Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
                 }
                 else -> {
                     Assert.assertEquals(true, false)
                 }
             }
         }
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 }

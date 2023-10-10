@@ -35,9 +35,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mayuresh.countries.R
-import com.mayuresh.countries.domain.model.CountryListUiState
+import com.mayuresh.countries.data.util.AppConstants
+import com.mayuresh.countries.domain.model.CountryListModel
 import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
-import com.mayuresh.countries.presentation.ui.theme.NYTimesShapes
+import com.mayuresh.countries.presentation.ui.theme.EuropeanCountriesShapes
 import com.mayuresh.countries.presentation.viewmodel.CountryListViewModel
 
 /**
@@ -49,26 +50,30 @@ import com.mayuresh.countries.presentation.viewmodel.CountryListViewModel
 fun EuropeCountryListScreenComponent(
     modifier: Modifier = Modifier,
     viewModel: CountryListViewModel = hiltViewModel(),
-    onCountrySelection: (CountryListUiState?) -> Unit
+    onCountrySelection: (CountryListModel?) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     Box(modifier = modifier.fillMaxSize()) {
         when {
-            state.isLoading -> ProgressBarComposable()
+            state.isLoading -> ProgressBarComponent(modifier = Modifier.fillMaxWidth())
             state.errorCode != 0 ->
                 Text(
-                    text = if (state.errorCode == 400) stringResource(id = R.string.internet_error_message) else stringResource(
-                        id = R.string.api_error_message
-                    ),
+                    text = if (state.errorCode == AppConstants.API_RESPONSE_ERROR) {
+                        stringResource(id = R.string.internet_error_message)
+                    } else {
+                        stringResource(
+                            id = R.string.api_error_message,
+                        )
+                    },
                     style = EuropeCountryTypography.labelSmall,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(10.dp),
-                    textAlign = TextAlign.Center
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center,
                 )
 
-            else -> LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
+            else -> LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
                 items(state.countries) { country ->
                     CountryListItem(country) {
                         onCountrySelection.invoke(it)
@@ -86,21 +91,22 @@ fun EuropeCountryListScreenComponent(
  */
 @Composable
 fun CountryListItem(
-    country: CountryListUiState, selectedCountry: (CountryListUiState) -> Unit
+    country: CountryListModel,
+    selectedCountry: (CountryListModel) -> Unit,
 ) {
     Card(
-        shape = NYTimesShapes.medium,
+        shape = EuropeanCountriesShapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 selectedCountry.invoke(country)
             }
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = 8.dp),
     ) {
         Row(
-            modifier = Modifier.padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             val placeholderImage = R.drawable.thumbnail
             AsyncImage(
@@ -115,7 +121,7 @@ fun CountryListItem(
                 modifier = Modifier
                     .clip(CircleShape)
                     .height(50.dp)
-                    .width(50.dp)
+                    .width(50.dp),
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -126,17 +132,16 @@ fun CountryListItem(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = EuropeCountryTypography.labelMedium,
-                    fontSize = 13.sp
+                    fontSize = 13.sp,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = country.region.plus(" ( "+ country.subregion + ")"),
+                    text = country.region.plus(" ( " + country.subregion + ")"),
                     maxLines = 1,
-                    style = EuropeCountryTypography.labelMedium
+                    style = EuropeCountryTypography.labelMedium,
                 )
             }
         }
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
-

@@ -38,10 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.mayuresh.countries.R
-import com.mayuresh.countries.domain.model.CountryDetailsUiState
+import com.mayuresh.countries.data.util.AppConstants
+import com.mayuresh.countries.domain.model.CountryDetailsModel
 import com.mayuresh.countries.presentation.intent.CountryDetailsIntent
 import com.mayuresh.countries.presentation.ui.theme.EuropeCountryTypography
-import com.mayuresh.countries.presentation.ui.theme.NYTimesShapes
+import com.mayuresh.countries.presentation.ui.theme.EuropeanCountriesShapes
 import com.mayuresh.countries.presentation.viewmodel.CountryDetailsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -56,40 +57,50 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 fun CountryDetailsScreenComponent(
     modifier: Modifier = Modifier,
     viewModel: CountryDetailsViewModel = hiltViewModel(),
-    countryCode: String
+    countryCode: String,
 ) {
-
     LaunchedEffect(key1 = Unit, block = {
         viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails(countryCode))
     })
     val state by viewModel.state.collectAsState()
     Box(modifier = modifier.fillMaxSize()) {
         when {
-            state.isLoading -> ProgressBarComposable()
+            state.isLoading -> ProgressBarComponent(modifier = Modifier.fillMaxWidth())
             state.errorCode != 0 ->
                 Text(
-                    text = if (state.errorCode == 400) stringResource(id = R.string.internet_error_message) else stringResource(
-                        id = R.string.api_error_message
-                    ),
+                    text = if (state.errorCode == AppConstants.API_RESPONSE_ERROR) {
+                        stringResource(id = R.string.internet_error_message)
+                    } else {
+                        stringResource(
+                            id = R.string.api_error_message,
+                        )
+                    },
                     style = EuropeCountryTypography.labelSmall,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(10.dp),
-                    textAlign = TextAlign.Center
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center,
                 )
 
-            else -> CountryDetailsComponent(state.country)
+            else -> CountryDetailsComponent(
+                modifier = Modifier.fillMaxSize(),
+                country = state.country,
+            )
         }
     }
 }
 
 @Composable
-fun CountryDetailsComponent(country: CountryDetailsUiState) {
+fun CountryDetailsComponent(
+    modifier: Modifier = Modifier,
+    country: CountryDetailsModel,
+) {
     val placeholderImage = R.drawable.thumbnail
+    Box(modifier = modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -103,19 +114,19 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                 .fillMaxWidth(1f)
                 .height(300.dp)
                 .border(BorderStroke(3.dp, MaterialTheme.colorScheme.primary))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
         Card(
-            shape = NYTimesShapes.medium,
+            shape = EuropeanCountriesShapes.medium,
             elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = 8.dp),
         ) {
             Column(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(8.dp),
             ) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
@@ -126,8 +137,8 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Medium,
-                                fontStyle = FontStyle.Italic
-                            )
+                                fontStyle = FontStyle.Italic,
+                            ),
                         ) {
                             append(country.region)
                         }
@@ -145,14 +156,14 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Medium,
-                                fontStyle = FontStyle.Italic
-                            )
+                                fontStyle = FontStyle.Italic,
+                            ),
                         ) {
                             append(country.subregion)
                         }
                     },
                     maxLines = 1,
-                    style = EuropeCountryTypography.titleMedium
+                    style = EuropeCountryTypography.titleMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -163,14 +174,14 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Medium,
-                                fontStyle = FontStyle.Italic
-                            )
+                                fontStyle = FontStyle.Italic,
+                            ),
                         ) {
                             append(country.population)
                         }
                     },
                     maxLines = 1,
-                    style = EuropeCountryTypography.titleMedium
+                    style = EuropeCountryTypography.titleMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -181,14 +192,14 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Medium,
-                                fontStyle = FontStyle.Italic
-                            )
+                                fontStyle = FontStyle.Italic,
+                            ),
                         ) {
                             append(country.currencies)
                         }
                     },
                     maxLines = 2,
-                    style = EuropeCountryTypography.titleMedium
+                    style = EuropeCountryTypography.titleMedium,
                 )
                 Text(
                     text = buildAnnotatedString {
@@ -198,17 +209,18 @@ fun CountryDetailsComponent(country: CountryDetailsUiState) {
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Medium,
-                                fontStyle = FontStyle.Italic
-                            )
+                                fontStyle = FontStyle.Italic,
+                            ),
                         ) {
                             append(country.languages)
                         }
                     },
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = EuropeCountryTypography.titleMedium
+                    style = EuropeCountryTypography.titleMedium,
                 )
             }
         }
+    }
     }
 }

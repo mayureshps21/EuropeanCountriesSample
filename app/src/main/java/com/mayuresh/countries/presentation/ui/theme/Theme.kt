@@ -73,7 +73,7 @@ val DarkColors = darkColorScheme(
 @Composable
 fun NYTimesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -85,8 +85,8 @@ fun NYTimesTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        shapes = NYTimesShapes,
+        shapes = EuropeanCountriesShapes,
         typography = EuropeCountryTypography,
-        content = content
+        content = content,
     )
 }

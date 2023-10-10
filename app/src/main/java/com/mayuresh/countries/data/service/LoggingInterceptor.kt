@@ -1,5 +1,6 @@
 package com.mayuresh.countries.data.service
 
+import android.util.Log
 import com.mayuresh.countries.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -11,40 +12,37 @@ class LoggingInterceptor : Interceptor {
         val request = chain.request()
         val response = chain.proceed(request)
 
-        // Log the request
         val requestBody = request.body
         val requestContent = requestBody?.let { bodyToString(it) } ?: "No Request Body"
-        val requestLog = "Request: ${request.method} ${request.url}\n$requestContent"
+        val requestLog = " Request: ${request.method} ${request.url}\n$requestContent"
 
-        // Log the response
         val responseBody = response.body
         val responseContent = responseBody?.let { bodyToString(it) } ?: "No Response Body"
-        val responseLog = "Response: ${response.code} $responseContent"
+        val responseLog = " Response: ${response.code} $responseContent"
 
-        // Print the logs or save them to a file as needed
         if (BuildConfig.DEBUG) {
-            println(requestLog)
-            println(responseLog)
+            Log.d(this.javaClass.name,requestLog)
+            Log.d(this.javaClass.name,responseLog)
         }
 
         return response
     }
 
     private fun bodyToString(requestBody: okhttp3.RequestBody): String {
-        try {
+        return try {
             val buffer = Buffer()
             requestBody.writeTo(buffer)
-            return buffer.readUtf8()
+            buffer.readUtf8()
         } catch (e: IOException) {
-            return "Error reading request body."
+            "Error reading request body."
         }
     }
+
     private fun bodyToString(responseBody: okhttp3.ResponseBody): String {
-        try {
-            val buffer = Buffer()
-            return responseBody.byteStream().toString()
+        return try {
+            responseBody.byteStream().toString()
         } catch (e: IOException) {
-            return "Error reading request body."
+            "Error reading request body."
         }
     }
 }

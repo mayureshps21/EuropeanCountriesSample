@@ -1,9 +1,9 @@
-package com.mayuresh.countries.data.model.countryinfo
+package com.mayuresh.countries.data.dto.countryinfo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Currency(
+data class CurrencyDto(
     @SerializedName("name")
     @Expose
     val name: String,

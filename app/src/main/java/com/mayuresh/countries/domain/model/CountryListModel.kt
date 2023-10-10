@@ -1,9 +1,9 @@
 package com.mayuresh.countries.domain.model
 
-data class CountryListUiState(
+data class CountryListModel(
     val name: String = "",
     val flagImageUrl: String = "",
     val countryCode: String = "",
     val region: String = "",
-    val subregion: String = ""
+    val subregion: String = "",
 )
