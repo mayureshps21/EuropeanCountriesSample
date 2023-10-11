@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mayuresh.domain"
+    namespace = "com.mayuresh.common"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -25,6 +25,14 @@ android {
             )
         }
     }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
@@ -32,11 +40,10 @@ android {
     kotlinOptions {
         jvmTarget = "18"
     }
+
 }
 
 dependencies {
-
-    implementation(project(":core:data"))
 
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
@@ -44,8 +51,9 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.json.converter)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.android.testing)
@@ -53,4 +61,5 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.mockk.android)
     testImplementation(libs.core.testing)
+    testImplementation(libs.robolectric)
 }

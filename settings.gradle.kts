@@ -1,4 +1,3 @@
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -6,6 +5,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositories {
         google()
@@ -14,7 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CountryListSample"
 include(":app")
-include("core:data")
-include("core:domain")
-include("features:home")
-include("features:detail")
+include(":core:common")
+include(":core:data")
+include(":core:domain")
+include(":features:home")
+include(":features:detail")

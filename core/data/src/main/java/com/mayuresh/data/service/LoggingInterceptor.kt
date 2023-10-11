@@ -21,8 +21,8 @@ class LoggingInterceptor : Interceptor {
         val responseLog = " Response: ${response.code} $responseContent"
 
         if (BuildConfig.DEBUG) {
-            Log.d(this.javaClass.name,requestLog)
-            Log.d(this.javaClass.name,responseLog)
+            Log.d(this.javaClass.name, requestLog)
+            Log.d(this.javaClass.name, responseLog)
         }
 
         return response
