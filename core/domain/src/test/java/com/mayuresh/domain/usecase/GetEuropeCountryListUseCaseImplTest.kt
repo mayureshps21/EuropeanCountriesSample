@@ -39,14 +39,10 @@ class GetEuropeCountryListUseCaseImplTest {
         val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
         // Then
         responseFlow.collectLatest { data ->
-            when (data) {
-                is com.mayuresh.domain.util.Response.Success -> {
-                    Assert.assertEquals("Finland", result.get(0).name)
-                }
-
-                else -> {
-                    Assert.assertEquals(true, false)
-                }
+            if (data is com.mayuresh.domain.util.Response.Success) {
+                Assert.assertEquals("Finland", result.get(0).name)
+            } else {
+                Assert.assertTrue(false)
             }
         }
     }
@@ -60,13 +56,10 @@ class GetEuropeCountryListUseCaseImplTest {
         val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
         // Then
         responseFlow.collectLatest { data ->
-            when (data) {
-                is com.mayuresh.domain.util.Response.Error -> {
-                    Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
-                }
-                else -> {
-                    Assert.assertEquals(true, false)
-                }
+            if (data is com.mayuresh.domain.util.Response.Error) {
+                Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
+            } else {
+                Assert.assertTrue(false)
             }
         }
     }

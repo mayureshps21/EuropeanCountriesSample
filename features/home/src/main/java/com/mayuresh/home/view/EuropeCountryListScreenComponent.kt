@@ -1,4 +1,4 @@
-package com.mayuresh.home
+package com.mayuresh.home.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,12 +34,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.mayuresh.common.components.ProgressBarComponent
+import com.mayuresh.common.R
+import com.mayuresh.common.presentation.components.ProgressBarComponent
 import com.mayuresh.common.theme.EuropeCountryTypography
 import com.mayuresh.common.theme.EuropeanCountriesShapes
 import com.mayuresh.data.model.CountryListModel
 import com.mayuresh.data.util.AppConstants
-import com.mayuresh.common.R
+import com.mayuresh.home.CountryListViewModel
 
 /**
  * This composable is responsible for list view representation of articles

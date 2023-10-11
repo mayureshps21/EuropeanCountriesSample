@@ -2,15 +2,6 @@ package com.mayuresh.data.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.mayuresh.data.dto.countryinfo.CapitalInfoDto
-import com.mayuresh.data.dto.countryinfo.CarDto
-import com.mayuresh.data.dto.countryinfo.CoatOfArmsDto
-import com.mayuresh.data.dto.countryinfo.CurrencyDto
-import com.mayuresh.data.dto.countryinfo.DemonymsDto
-import com.mayuresh.data.dto.countryinfo.FlagsDto
-import com.mayuresh.data.dto.countryinfo.MapsDto
-import com.mayuresh.data.dto.countryinfo.NameDto
-import com.mayuresh.data.dto.countryinfo.TranslationDto
 import com.mayuresh.data.dto.countryinfo.*
 
 data class CountryDto(

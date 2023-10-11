@@ -35,7 +35,8 @@ object TestData {
 
     private fun getFinlandCountryData(): List<CountryDto> {
         val itemType = object : TypeToken<List<CountryDto>>() {}.type
-        return Gson().fromJson<List<CountryDto>>(jsonString, itemType).filter { it.nameDto.common == "Finland" }
+        return Gson().fromJson<List<CountryDto>>(jsonString, itemType)
+            .filter { it.nameDto.common == "Finland" }
     }
 
     fun getCountriesData(): List<CountryDto> {

@@ -19,7 +19,12 @@ class GetEuropeanCountriesUseCase @Inject constructor(private val europeCountrie
                 val result = EuropeanCountryListMapper().mapFrom(countriesList)
                 emit(Response.Success(result))
             } else {
-                emit(Response.Error(code = AppConstants.API_RESPONSE_ERROR, message = response.message()))
+                emit(
+                    Response.Error(
+                        code = AppConstants.API_RESPONSE_ERROR,
+                        message = response.message()
+                    )
+                )
             }
         }
 }

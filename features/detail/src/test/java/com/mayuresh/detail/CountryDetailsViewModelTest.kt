@@ -46,7 +46,7 @@ class CountryDetailsViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, true)
-        networkHelper = mockk(NetworkHelper::class.java.name,true)
+        networkHelper = mockk(NetworkHelper::class.java.name, true)
         viewModel = CountryDetailsViewModel(
             getCountriesDetailsUseCase = getCountriesDetailsUseCase,
             networkHelper = networkHelper,
@@ -55,59 +55,68 @@ class CountryDetailsViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `countryDetailsViewModel should update state with expected data when fetching country details with success and network available`() = runTest {
-        //Given
-        val isNetworkAvailable = true
-        val country = CountryDetailsModel("Florida")
-        val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
-            emit(Response.Success(country))
+    fun `countryDetailsViewModel should update state with expected data when fetching country details with success and network available`() =
+        runTest {
+            //Given
+            val isNetworkAvailable = true
+            val country = CountryDetailsModel("Florida")
+            val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
+                emit(Response.Success(country))
+            }
+            //When
+            every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
+            coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
+            viewModel.fetchCountryDetails("190")
+            //Then
+            responseFlow.collectLatest {
+                Assert.assertEquals("Florida", viewModel.state.value.country.name)
+            }
         }
-        //When
-        every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
-        coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
-        viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails("190"))
-        //Then
-        responseFlow.collectLatest {
-            Assert.assertEquals("Florida", viewModel.state.value.country.name)
-        }
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `countryDetailsViewModel should update state with error code when fetching country details with error`() = runTest {
-        //Given
-        val isNetworkAvailable = true
-        val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
-            emit(Response.Error(code = AppConstants.API_RESPONSE_ERROR, "Test"))
+    fun `countryDetailsViewModel should update state with error code when fetching country details with error`() =
+        runTest {
+            //Given
+            val isNetworkAvailable = true
+            val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
+                emit(Response.Error(code = AppConstants.API_RESPONSE_ERROR, "Test"))
+            }
+            //When
+            every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
+            coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
+            viewModel.fetchCountryDetails("190")
+            //Then
+            responseFlow.collectLatest {
+                Assert.assertEquals(
+                    AppConstants.API_RESPONSE_ERROR,
+                    viewModel.state.value.errorCode
+                )
+            }
         }
-        //When
-        every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
-        coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
-        viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails("190"))
-        //Then
-        responseFlow.collectLatest {
-            Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, viewModel.state.value.errorCode)
-        }
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `countryDetailsViewModel should update state with error code when fetching country details with exception`() = runTest {
-        //Given
-        val isNetworkAvailable = true
-        val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
-            emit(Response.Exception(Throwable(message = "Test")))
-        }
-        //When
-        every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
-        coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
-        viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails("190"))
+    fun `countryDetailsViewModel should update state with error code when fetching country details with exception`() =
+        runTest {
+            //Given
+            val isNetworkAvailable = true
+            val responseFlow: Flow<Response<CountryDetailsModel>> = flow {
+                emit(Response.Exception(Throwable(message = "Test")))
+            }
+            //When
+            every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
+            coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
+            viewModel.fetchCountryDetails("190")
 
-        //Then
-        responseFlow.collectLatest {
-            Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, viewModel.state.value.errorCode)
+            //Then
+            responseFlow.collectLatest {
+                Assert.assertEquals(
+                    AppConstants.API_RESPONSE_ERROR,
+                    viewModel.state.value.errorCode
+                )
+            }
         }
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -120,7 +129,7 @@ class CountryDetailsViewModelTest {
         //When
         every { networkHelper.isNetworkConnected() } returns isNetworkAvailable
         coEvery { getCountriesDetailsUseCase.invoke("190") } returns responseFlow
-        viewModel.processIntent(CountryDetailsIntent.FetchCountryDetails("190"))
+        viewModel.fetchCountryDetails("190")
 
         //Then
         responseFlow.collectLatest {

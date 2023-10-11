@@ -1,5 +1,6 @@
-package com.mayuresh.common.components
+package com.mayuresh.common.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -31,11 +32,12 @@ fun AppToolbarComponent(
     isShowBackButton: Boolean,
     onUpClick: () -> Unit,
 ) {
+    Log.d("Mayuresh=> ", "button " + isShowBackButton)
     TopAppBar(
         title = {
             Text(
                 text = title,
-                style = EuropeCountryTypography.titleMedium,
+                style = EuropeCountryTypography.labelMedium,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -49,7 +51,7 @@ fun AppToolbarComponent(
         ),
         navigationIcon = {
             if (isShowBackButton) {
-                IconButton(onClick = onUpClick) {
+                IconButton(onClick = { onUpClick.invoke() }) {
                     Icon(
                         Icons.Filled.ArrowBack,
                         contentDescription = null,

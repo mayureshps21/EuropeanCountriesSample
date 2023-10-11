@@ -1,4 +1,6 @@
-A simple app to hit the European Country List API and show a list of european countries, that shows details when items on the list item is tapped and implement MVI architecture using Dagger Hilt, Retrofit, Coroutines, Flows, Jetpack Compose and Navigation Component.
+A simple app to hit the European Country List API and show a list of european countries, that shows
+details when items on the list item is tapped and implement MVI architecture using Dagger Hilt,
+Retrofit, Coroutines, Flows, Jetpack Compose and Navigation Component.
 
 API used - https://restcountries.com/
 
@@ -12,6 +14,7 @@ API Documentation: https://restcountries.com/
 <br>
 
 ## This Project showcases:
+
 1. MVI architecture.
 2. View Model.
 3. Unit test cases.
@@ -25,8 +28,8 @@ API Documentation: https://restcountries.com/
 11. Mockk.
     <br>
 
-
 ## The app has following packages:
+
 1. **data**: This package is responsible for providing data to the application.
 2. **domain**: This layer has use case and business logic.
 3. **presentation**: This package contains user interface and view model
@@ -34,6 +37,7 @@ API Documentation: https://restcountries.com/
    <br>
 
 ## If you see java 11 error then do following steps
+
 1. **Go to Files**
 2. **Settings**
 4. **Build,Execution,Deployment**
@@ -42,6 +46,7 @@ API Documentation: https://restcountries.com/
    <br>
 
 ## License
+
 ```
    Copyright (C) 2022 Mayuresh Deshmukh
 

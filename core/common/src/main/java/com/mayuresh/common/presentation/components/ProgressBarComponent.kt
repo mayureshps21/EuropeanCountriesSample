@@ -1,4 +1,4 @@
-package com.mayuresh.common.components
+package com.mayuresh.common.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,6 +1,5 @@
 package com.mayuresh.domain.usecase
 
-import android.content.Context
 import com.mayuresh.data.dto.CountryDto
 import com.mayuresh.data.repository.CountryDetailsRepository
 import com.mayuresh.data.util.AppConstants
@@ -25,19 +24,14 @@ class GetCountryInformationUseCaseTest {
     @MockK
     private lateinit var countryDetailsRepository: CountryDetailsRepository
 
-    @MockK
-    private lateinit var context: Context
-
     private lateinit var getCountriesDetailsUseCase: GetCountriesDetailsUseCase
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-//        context = mockk(ApplicationContext::class.java.name)
         getCountriesDetailsUseCase =
-            GetCountriesDetailsUseCase(countryDetailsRepository, context)
+            GetCountriesDetailsUseCase(countryDetailsRepository)
     }
-
 
     @Test
     fun `Should validate and pass countries response success test`() = runTest {
@@ -50,14 +44,27 @@ class GetCountryInformationUseCaseTest {
         val responseFlow = getCountriesDetailsUseCase.invoke("419")
         // Then
         responseFlow.collectLatest { data ->
-            when (data) {
-                is com.mayuresh.domain.util.Response.Success -> {
-                    Assert.assertEquals("Finland", result.name)
-                }
+            if (data is com.mayuresh.domain.util.Response.Success) {
+                Assert.assertEquals("Finland", result.name)
+            } else {
+                Assert.assertTrue(false)
+            }
+        }
+    }
 
-                else -> {
-                    Assert.assertEquals(true, false)
-                }
+    @Test
+    fun `Should validate and pass countries response emptyList success test`() = runTest {
+        val response: Response<List<CountryDto>> = Response.success(emptyList())
+        // Given
+        coEvery { countryDetailsRepository.getCountryDetails("419") } returns response
+        // When
+        val responseFlow = getCountriesDetailsUseCase.invoke("419")
+        // Then
+        responseFlow.collectLatest { data ->
+            if (data is com.mayuresh.domain.util.Response.Error) {
+                Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
+            } else {
+                Assert.assertTrue(false)
             }
         }
     }
@@ -71,14 +78,10 @@ class GetCountryInformationUseCaseTest {
         val responseFlow = getCountriesDetailsUseCase.invoke("419")
         // Then
         responseFlow.collectLatest { data ->
-            when (data) {
-                is com.mayuresh.domain.util.Response.Error -> {
-                    Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
-                }
-
-                else -> {
-                    Assert.assertEquals(true, false)
-                }
+            if (data is com.mayuresh.domain.util.Response.Error) {
+                Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
+            } else {
+                Assert.assertTrue(false)
             }
         }
     }
@@ -92,14 +95,10 @@ class GetCountryInformationUseCaseTest {
         val responseFlow = getCountriesDetailsUseCase.invoke("419")
         // Then
         responseFlow.collectLatest { data ->
-            when (data) {
-                is com.mayuresh.domain.util.Response.Error -> {
-                    Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
-                }
-
-                else -> {
-                    Assert.assertEquals(true, false)
-                }
+            if (data is com.mayuresh.domain.util.Response.Error) {
+                Assert.assertEquals(AppConstants.API_RESPONSE_ERROR, data.code)
+            } else {
+                Assert.assertTrue(false)
             }
         }
     }

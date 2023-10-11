@@ -2,12 +2,14 @@ package com.mayuresh.countries.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mayuresh.detail.CountryDetailsScreenComponent
-import com.mayuresh.home.EuropeCountryListScreenComponent
+import com.mayuresh.countries.R
+import com.mayuresh.detail.view.CountryDetailsScreenComponent
+import com.mayuresh.home.view.EuropeCountryListScreenComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -27,19 +29,22 @@ fun EuropeanCountriesNavGraph(
         composable(
             route = CountryDestinations.COUNTRY_LIST_ROUTE,
         ) {
+            actionBarTitle.invoke(stringResource(id = R.string.title))
             isShowBackButton.invoke(false)
-            EuropeCountryListScreenComponent(onCountrySelection = {
-                navController.navigate(
-                    route = CountryDestinations.COUNTRY_DETAIL_ROUTE.plus("/")
-                        .plus(it?.countryCode ?: ""),
-                )
-                actionBarTitle.invoke(it?.name)
-            })
+            EuropeCountryListScreenComponent(
+                onCountrySelection = {
+                    navController.navigate(
+                        route = CountryDestinations.COUNTRY_DETAIL_ROUTE.plus("/")
+                            .plus(it?.countryCode ?: ""),
+                    )
+                }
+            )
         }
         composable(route = CountryDestinations.COUNTRY_DETAIL_ROUTE.plus("/{code}")) { backStackEntry ->
-            isShowBackButton.invoke(true)
             CountryDetailsScreenComponent(
                 countryCode = backStackEntry.arguments?.getString("code") ?: "",
+                actionBarTitle = actionBarTitle,
+                isShowBackButton = isShowBackButton
             )
         }
     }

@@ -17,23 +17,23 @@
 # This file is used by Google as part of our samples packaging process.
 # End users may safely ignore this file. It has no relevance to other systems.
 ---
-status:       PUBLISHED
-technologies: [Android, JetpackCompose]
+status: PUBLISHED
+technologies: [ Android, JetpackCompose ]
 categories:
-    - AndroidArchitectureUILayer
-    - AndroidArchitectureStateProduction
-    - JetpackComposeArchitectureAndState
-    - JetpackComposeDesignSystems
-    - JetpackComposeLayouts
-    - JetpackComposeNavigation
-    - JetpackComposeTesting
-languages:    [Kotlin]
+  - AndroidArchitectureUILayer
+  - AndroidArchitectureStateProduction
+  - JetpackComposeArchitectureAndState
+  - JetpackComposeDesignSystems
+  - JetpackComposeLayouts
+  - JetpackComposeNavigation
+  - JetpackComposeTesting
+languages: [ Kotlin ]
 solutions:
-    - Mobile
-    - JetpackLifecycle
-    - JetpackNavigation
-github:       android/compose-samples
-level:        INTERMEDIATE
+  - Mobile
+  - JetpackLifecycle
+  - JetpackNavigation
+github: android/compose-samples
+level: INTERMEDIATE
 apiRefs:
-    - android:androidx.compose.Composable
+  - android:androidx.compose.Composable
 license: apache2
