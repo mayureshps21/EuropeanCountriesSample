@@ -46,7 +46,6 @@ class CountryListViewModel @Inject constructor(
                         when (response) {
                             is Response.Success -> {
                                 sendEvent(CountryListScreenUiEvent.ShowData(data = response.data))
-                                sendEvent(CountryListScreenUiEvent.IsLoading(isLoading = false))
                             }
 
                             is Response.Error -> {
@@ -69,7 +68,7 @@ class CountryListViewModel @Inject constructor(
         override fun reduce(oldState: CountryListUiState, event: CountryListScreenUiEvent) {
             when (event) {
                 is CountryListScreenUiEvent.ShowData -> {
-                    setState(oldState.copy(countries = event.data))
+                    setState(oldState.copy(countries = event.data, isLoading = false))
                 }
 
                 is CountryListScreenUiEvent.IsLoading -> {
@@ -77,11 +76,11 @@ class CountryListViewModel @Inject constructor(
                 }
 
                 is CountryListScreenUiEvent.OnAPIError -> {
-                    setState(oldState.copy(errorCode = AppConstants.API_RESPONSE_ERROR))
+                    setState(oldState.copy(errorCode = AppConstants.API_RESPONSE_ERROR, isLoading = false))
                 }
 
                 is CountryListScreenUiEvent.OnInternetError -> {
-                    setState(oldState.copy(errorCode = AppConstants.INTERNET_ERROR))
+                    setState(oldState.copy(errorCode = AppConstants.INTERNET_ERROR, isLoading = false))
                 }
             }
         }
