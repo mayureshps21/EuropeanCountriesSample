@@ -21,12 +21,12 @@ class GetEuropeCountryListUseCaseImplTest {
     @MockK
     private lateinit var europeCountriesListRepository: EuropeanCountriesListRepository
 
-    private lateinit var getEuropeCountryListUseCaseImpl: GetEuropeanCountriesUseCase
+    private lateinit var getEuropeCountryListUseCase: GetEuropeanCountriesUseCase
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        getEuropeCountryListUseCaseImpl = GetEuropeanCountriesUseCase(europeCountriesListRepository)
+        getEuropeCountryListUseCase = GetEuropeanCountriesUseCase(europeCountriesListRepository)
     }
 
     @Test
@@ -36,7 +36,7 @@ class GetEuropeCountryListUseCaseImplTest {
         val result = EuropeanCountryListMapper().mapFrom(response.body() as List<CountryDto>)
         // When
         coEvery { europeCountriesListRepository.getEuropeCountriesList() } returns response
-        val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
+        val responseFlow = getEuropeCountryListUseCase()
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Success) {
@@ -53,7 +53,7 @@ class GetEuropeCountryListUseCaseImplTest {
         val response: Response<List<CountryDto>> = TestData.getCountriesResponseRetrofit(true)
         // When
         coEvery { europeCountriesListRepository.getEuropeCountriesList() } returns response
-        val responseFlow = getEuropeCountryListUseCaseImpl.invoke()
+        val responseFlow = getEuropeCountryListUseCase()
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Error) {

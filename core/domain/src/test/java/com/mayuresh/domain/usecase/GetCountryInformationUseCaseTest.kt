@@ -19,7 +19,6 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
 
-@RunWith(MockitoJUnitRunner::class)
 class GetCountryInformationUseCaseTest {
     @MockK
     private lateinit var countryDetailsRepository: CountryDetailsRepository
@@ -41,7 +40,7 @@ class GetCountryInformationUseCaseTest {
         // Given
         coEvery { countryDetailsRepository.getCountryDetails("419") } returns response
         // When
-        val responseFlow = getCountriesDetailsUseCase.invoke("419")
+        val responseFlow = getCountriesDetailsUseCase("419")
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Success) {
@@ -58,7 +57,7 @@ class GetCountryInformationUseCaseTest {
         // Given
         coEvery { countryDetailsRepository.getCountryDetails("419") } returns response
         // When
-        val responseFlow = getCountriesDetailsUseCase.invoke("419")
+        val responseFlow = getCountriesDetailsUseCase("419")
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Error) {
@@ -75,7 +74,7 @@ class GetCountryInformationUseCaseTest {
         // Given
         coEvery { countryDetailsRepository.getCountryDetails("419") } returns response
         // When
-        val responseFlow = getCountriesDetailsUseCase.invoke("419")
+        val responseFlow = getCountriesDetailsUseCase("419")
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Error) {
@@ -92,7 +91,7 @@ class GetCountryInformationUseCaseTest {
         val response: Response<List<CountryDto>> = TestData.getFinlandCountryResponseRetrofit(true)
         coEvery { countryDetailsRepository.getCountryDetails("419") } returns response
         // When
-        val responseFlow = getCountriesDetailsUseCase.invoke("419")
+        val responseFlow = getCountriesDetailsUseCase("419")
         // Then
         responseFlow.collectLatest { data ->
             if (data is com.mayuresh.domain.util.Response.Error) {

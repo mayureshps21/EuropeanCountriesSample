@@ -17,13 +17,13 @@ import javax.inject.Inject
 
 /**
  * This view model is responsible for pass countries list to composable functions
- * @param getCountriesDetailsUseCase
+ * @param getCountriesDetails
  * @param networkHelper
  */
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class CountryDetailsViewModel @Inject constructor(
-    private val getCountriesDetailsUseCase: GetCountriesDetailsUseCase,
+    private val getCountriesDetails: GetCountriesDetailsUseCase,
     private val networkHelper: NetworkHelper,
 ) : BaseViewModel<CountryDetailsUiState, CountryDetailsScreenUiEvent>() {
     private val reducer = MainReducer(CountryDetailsUiState.initial())
@@ -38,7 +38,7 @@ class CountryDetailsViewModel @Inject constructor(
     fun fetchCountryDetails(countryCode: String) {
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                getCountriesDetailsUseCase.invoke(countryCode)
+                getCountriesDetails(countryCode)
                     .collect() { response ->
                         when (response) {
                             is Response.Success -> {

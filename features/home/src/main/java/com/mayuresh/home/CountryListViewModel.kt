@@ -10,18 +10,19 @@ import com.mayuresh.domain.util.Response
 import com.mayuresh.home.intent.CountryListScreenUiEvent
 import com.mayuresh.home.model.CountryListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
  * This view model is responsible for pass countries list to composable functions
- * @param getEuropeanCountriesUseCase
+ * @param getEuropeanCountries
  * @param networkHelper
  */
 @HiltViewModel
 class CountryListViewModel @Inject constructor(
-    private val getEuropeanCountriesUseCase: GetEuropeanCountriesUseCase,
+    private val getEuropeanCountries: GetEuropeanCountriesUseCase,
     private val networkHelper: NetworkHelper,
 ) : BaseViewModel<CountryListUiState, CountryListScreenUiEvent>() {
 
@@ -39,9 +40,9 @@ class CountryListViewModel @Inject constructor(
     }
 
     fun loadCountries() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (networkHelper.isNetworkConnected()) {
-                getEuropeanCountriesUseCase.invoke()
+                getEuropeanCountries()
                     .collect() { response ->
                         when (response) {
                             is Response.Success -> {

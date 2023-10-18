@@ -1,7 +1,7 @@
 package com.mayuresh.domain.util
 
 /**
- * A sealed class representing the result of a network operation, which can be either a loading, success, an error, or an exception.
+ * A sealed class representing the result of a network operation, which can be either a success, an error, or an exception.
  *
  * @param T The type of data that is returned in case of success.
  **/

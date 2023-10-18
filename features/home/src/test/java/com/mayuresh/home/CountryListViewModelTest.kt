@@ -26,9 +26,6 @@ import org.junit.rules.TestRule
 
 class CountryListViewModelTest {
 
-    @get:Rule
-    val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
@@ -45,7 +42,7 @@ class CountryListViewModelTest {
         MockKAnnotations.init(this, true)
         networkHelper = mockk(relaxed = true)
         viewModel = CountryListViewModel(
-            getEuropeanCountriesUseCase = getEuropeanCountryUseCase,
+            getEuropeanCountries = getEuropeanCountryUseCase,
             networkHelper = networkHelper,
         )
     }
